@@ -9,34 +9,32 @@ void solve() {
     // 1 billion bytes -> 1GB
     
     // function is like a valley
-    long long i = 0;
-    long long j = n - 1;
-    long long best = n - 1;
-    // we want to find the smallest idx where ai + ... + am > am+1 + an
-    // check this is correct ^^^
+    long long i = 1;
+    long long j = n;
     
-    auto s = [&k](const long long m) {
+    auto sum_to = [&k](const long long m) -> long long {
         return k * m + (m * (m - 1LL))/2LL;
     };
+    long long best = sum_to(n);
 
     while (i <= j) {
         long long m = (i + j) / 2;
-        long long mp = m + 1LL;
 
-        long long left = s(mp)
-        long long right = s(n) - left;
+        // sum(a1 to ai) - sum(a{i+1} to an)
+        // = 2*sum(a1 to ai) - sum(a1 to an)
+        long long mid = abs(2LL*sum_to(m) - sum_to(n));
+        long long midr = abs(2LL*sum_to(m+1) - sum_to(n));
 
-        if (left >= right) {
-            best = m;
+        if (mid <= midr) {
+            best = min(best, mid);
             j = m - 1;
         } else {
+            best = min(best, midr);
             i = m + 1;
         }
     }
 
-    long long left = k * best + (best * (best - 1LL));
-    long long right = k * n + (n * (n - 1LL))/2LL - left;
-    cout << right << endl;
+    cout << best << endl;
 }
 
 int main() {
