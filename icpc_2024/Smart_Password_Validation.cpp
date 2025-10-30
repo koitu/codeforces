@@ -5,25 +5,47 @@ using namespace std;
 // map<char, char> rightShift;
 
 constexpr vector<string> left = vector<string>{
-    "`1234567",
-    "~!@#$%^&",
-    "qwerty",
-    "QWERTY",
-    "asdfgh",
-    "ASDFGH",
-    "zxcvbn",
-    "ZXCVBN",
+    "`123456",
+    "~!@#$%^",
+    "qwert",
+    "QWERT",
+    "asdfg",
+    "ASDFG",
+    "zxcvb",
+    "ZXCVB",
+};
+
+constexpr vector<string> leftShift = vector<string>{
+    "1234567",
+    "!@#$%^&",
+    "werty",
+    "WERTY",
+    "sdfgh",
+    "SDFGH",
+    "xcvbn",
+    "XCVBN",
 };
 
 constexpr vector<string> right = vector<string>{
-    "67890-=",
-    "^&*()_+",
-    "tyuiop[]\\",
-    "TYUIOP{}|",
-    "ghjkl;\'",
-    "GHJKL:\"",
-    "vbnm,./",
-    "VBNM<>?",
+    "7890-=",
+    "&*()_+",
+    "yuiop[]\\",
+    "YUIOP{}|",
+    "hjkl;\'",
+    "HJKL:\"",
+    "bnm,./",
+    "BNM<>?",
+};
+
+constexpr vector<string> rightShift = vector<string>{
+    "67890-",
+    "^&*()_",
+    "tyuiop[]",
+    "TYUIOP{}",
+    "ghjkl;",
+    "GHJKL:",
+    "vbnm,.",
+    "VBNM<>",
 };
 
 bool eq_one_off(string a, string b) {
@@ -31,11 +53,23 @@ bool eq_one_off(string a, string b) {
         swap(a, b);
     }
 
+    // a is one larger than b
     const int n = b.length();
+
     int i = 0;
-    for (int i = 0; i < n; i++) {
-        if (a[i] 
+    for (; i < n; i++) {
+        if (a[i] != b[i]) {
+            break;
+        }
     }
+
+    for (; i < n; i++) {
+        if (a[i+1] != b[i]) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 
@@ -47,22 +81,78 @@ void solve(const string pw) {
         cout << "NO" << endl;
     }
 
+    if (pw == ty) {
+        cout << "YES" << endl;
+    }
+
     if (ty.length() == pw.length()) {
         // check LS (left shift)
+        string ls = "";
+        const int n = ty.length();
+
+        for (int i = 0; i < n; i++) {
+            bool found = false;
+            size_t pos;
+            for (int j = 0; j < left.size(); j++) {
+                if ((pos = left[j].find(ty[i])) != std::string::npos) {
+                    ls += leftShift[j][pos];
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                ls += ty[i];
+            }
+        }
 
         // check RS (rigth shift)
+        string rs = "";
+        for (int i = 0; i < n; i++) {
+            bool found = false;
+            size_t pos;
+            for (int j = 0; j < right.size(); j++) {
+                if ((pos = right[j].find(ty[i])) != std::string::npos) {
+                    rs += rightShift[j][pos];
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                rs += ty[i];
+            }
+        }
         
         // check CL (caps lock)
+        string cl = "";
+        for (int i = 0; i < n; i++) {
+            if (isalpha(ty[i])) {
+                if (islower(ty[i])) {
+                    cl += toupper(ty[i]);
+                } else {
+                    cl += tolower(ty[i]);
+                }
+            }
+        }
+
+        if ((pw == ls) || (pw == rs) || (pw == cl)) {
+            cout << "YES" << endl;
+        }
 
     } else {
         // we know that the difference between string lengths is one character
-        if (pw.length() > ty.length()) {
-            // check MC (single missing character)
-
-        } else {
-            // check EC (single extra character)
-
+        if (eq_one_off(ty, pw)) {
+            cout << "YES" << endl;
         }
+
+//        if (pw.length() > ty.length()) {
+//            // check MC (single missing character)
+//
+//        } else {
+//            // check EC (single extra character)
+//
+//        }
     }
 }
 

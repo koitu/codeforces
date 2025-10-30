@@ -110,6 +110,65 @@ int main() {
 
     // idea: think of the grid as a graph where we cull the nodes when there is better and merge those that are the same
     // in the end we come back to bfs (but try to do it faster)
-    // - 
+
+    typedef pair<int, int> ii;
+    vector<ii> cur;
+    vector<ii> nxt;
+
+    cur.reserve(3001);
+    nxt.reserve(3001);
+
+    vector<char> res;
+
+    int end = n + n - 1;
+    char best = 'Z';
+    cur.emplace_back(0, 0);
+
+    vector<vector<bool>> visited(n, vector<bool>(n, false));
+
+//    cout << endl;
+
+    for (int i = 0; i < end; i++) {
+        for (const auto [x, y]: cur) {
+            best = min(best, c[x][y]);
+
+        }
+        for (const auto [x, y]: cur) {
+            char cc = c[x][y];
+            if (cc != best) {
+                continue;
+            }
+
+            // would a map of visited be faster here?
+            if (x + 1 < n && !visited[x+1][y]) {
+                visited[x+1][y] = true;
+                nxt.emplace_back(x+1, y);
+            }
+
+            if (y + 1 < n && !visited[x][y+1]) {
+                visited[x][y+1] = true;
+                nxt.emplace_back(x, y+1);
+            }
+        }
+
+//        cout << best << endl;
+//        for (auto [x, y]: nxt) {
+//            cout << x << " " << y << endl;
+//        }
+//        for (int x = 0; x < n; x++) {
+//            for (int y = 0; y < n; y++) {
+//                cout << (visited[x][y] ? 'x' : '.');
+//            }
+//            cout << endl;
+//        }
+//        cout << endl;
+        
+        res.push_back(best);
+        best = 'Z';
+        cur.clear();
+        swap(cur, nxt);
+    }
+    
+    cout << string(res.begin(), res.end()) << endl;
 }
 
