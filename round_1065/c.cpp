@@ -9,8 +9,15 @@ void solve() {
     vector<int> a(n);
     vector<int> b(n);
 
-    for (int i = 0; i < n; i++) cin >> a[i];
-    for (int i = 0; i < n; i++) cin >> b[i];
+    int res = 0;
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        res ^= a[i];
+    }
+    for (int i = 0; i < n; i++) {
+        cin >> b[i];
+        res ^= b[i];
+    }
 
     // consider that arrays start 1
     //
@@ -61,51 +68,81 @@ void solve() {
     // what about order!
     // we can only counter a play that has already been done!
 
-    int aa = 0;
-    int bb = 0;
+    //int aa = 0;
+    //int bb = 0;
 
-    int odd = 0;
-    int even = 0;
-    for (int i = 0; i < n; i++) {
-        int common = a[i] & b[i];
-        aa ^= common;
-        bb ^= common;
+    //int odd = 0;
+    //int even = 0;
+    //for (int i = 0; i < n; i++) {
+    //    int common = a[i] & b[i];
+    //    aa ^= common;
+    //    bb ^= common;
+    //}
+
+    //for (int i = 0; i < n; i++) {
+    //    int common = a[i] & b[i];
+
+    //    int a1 = aa ^ (a[i] ^ common);
+    //    int a2 = aa ^ (b[i] ^ common);
+
+    //    int b1 = aa ^ (b[i] ^ common);
+    //    int b2 = aa ^ (a[i] ^ common);
+    //    
+    //    if (i % 2 == 0) {
+    //        // Ajisai
+    //        if (a1 - b1 > a2 - b2) {
+    //            aa = a1;
+    //            bb = b1;
+    //        } else {
+    //            aa = a2;
+    //            bb = b2;
+    //        }
+
+    //    } else {
+    //        // Mai
+    //        if (b1 - a1 > b2 - b2) {
+    //            aa = a1;
+    //            bb = b1;
+    //        } else {
+    //            aa = a2;
+    //            bb = b2;
+    //        }
+    //    }
+    //}
+    
+
+    // bruh why am I so bad at XOR
+    // solution
+    //
+    // easy:
+    // - XOR all elements to get the XOR betweeen Ajisai and Mai's final scores
+    // - if equal to zero then tie
+    // - otherwise then whoever controls the last one flip wins
+    // hard:
+    // - same as easy but need to also consider the MST
+    // - whoever controls the last flip of the MST wins
+
+
+    if (res == 0) {
+        cout << "Tie" << endl;
+        return;
     }
 
+    int mst = 0;
+    while (res > 0) {
+        mst++;
+        res >>= 1;
+    }
+    mst--;
+
+    int idx = 0;
     for (int i = 0; i < n; i++) {
-        int common = a[i] & b[i];
-
-        int a1 = aa ^ (a[i] ^ common);
-        int a2 = aa ^ (b[i] ^ common);
-
-        int b1 = aa ^ (b[i] ^ common);
-        int b2 = aa ^ (a[i] ^ common);
-        
-        if (i % 2 == 0) {
-            // Ajisai
-            if (a1 - b1 > a2 - b2) {
-                aa = a1;
-                bb = b1;
-            } else {
-                aa = a2;
-                bb = b2;
-            }
-
-        } else {
-            // Mai
-            if (b1 - a1 > b2 - b2) {
-                aa = a1;
-                bb = b1;
-            } else {
-                aa = a2;
-                bb = b2;
-            }
+        if ((a[i] ^ b[i]) & (1 << mst)) {
+            idx = i;
         }
     }
 
-    if (aa == bb) {
-        cout << "Tie" << endl;
-    } else if (aa > bb) {
+    if (idx % 2 == 0) {
        cout << "Ajisai" << endl;
     } else {
        cout << "Mai" << endl;
