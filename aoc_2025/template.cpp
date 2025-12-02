@@ -20,7 +20,6 @@ vector<string> split(const string &s, const string &de) {
 
 int main() {
     string input_file = "sample_a.txt";
-    cin >> input_file;
 
     fstream file(input_file);
     string line;
