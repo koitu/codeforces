@@ -11,7 +11,6 @@ int main() {
 
     // sqrt decomp
     // sqrt(n) where n is 1e5 is about 1e3 and 1e8 (100 million) should be feasible in 1 second
-    // it appears that this is a little bit too slow... (around 1.5-2 seconds for the largest cases...)
     const int sq = ceil(sqrt(n));
     list<list<int>> vals;
     list<int> hold;
