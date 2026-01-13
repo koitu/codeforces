@@ -5,6 +5,8 @@ Introductory Problems
 Sorting and Searching
 - Missing Coin Sum: https://cses.fi/problemset/task/2183
 - Collecting Numbers II: https://cses.fi/problemset/task/2217
+- Distinct Values Subarrays: https://cses.fi/problemset/model/3420/
+    - interesting solution with a map rather than insert/erase from a set
 
 DP
 - Elevator Rides: https://cses.fi/problemset/task/1653

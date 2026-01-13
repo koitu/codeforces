@@ -61,16 +61,16 @@ int main() {
     // insight: when the number is less than some number before it we can either make a new tower or take it
     // - however we can always just take it now!
     // - if we make a new tower and some number larger than current but smaller than prev comes it would be better to create a new tower with it than current
-    set<int> a;
+    multiset<int> a;
     int b;
     for (int i = 0; i < n; i++) {
         cin >> b;
 
-        const auto it = a.lower_bound(b);
+        const auto it = a.upper_bound(b);
         if (it == a.end()) {
             a.insert(b);
 
-        } else if (!a.count(b)) {
+        } else {
             a.erase(it);
             a.insert(b);
         }
