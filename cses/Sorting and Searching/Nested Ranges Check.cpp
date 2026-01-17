@@ -85,6 +85,7 @@ int main() {
     }
 
     vector<pair<int, int>> max_r;
+    vector<pair<int, int>> min_r;
     int best = INT_MIN;
     int count = 0;
     for (int i = 0; i < n; i++) {
@@ -100,6 +101,21 @@ int main() {
         max_r.emplace_back(best, count);
     }
 
+    best = INT_MAX;
+    count = 0;
+    for (int i = n-1; i >= 0; i--) {
+        if (r[i] < best) {
+            best = r[i];
+            count = 0;
+        }
+
+        if (r[i] == best) {
+            count++;
+        }
+        min_r.emplace_back(best, count);
+    }
+    reverse(min_r.begin(), min_r.end());
+
     // distance on a vector iterator should be O(1)
     // - for each range print if it contains some other range (1) or not (0)
     // - for each range print if it is contained by some other range (1) or not (0)
@@ -110,13 +126,24 @@ int main() {
         auto it = lower_bound(l.begin(), l.end(), left);
 
         int idx = distance(l.begin(), it);
-        auto [right_mx, count] = max_r[idx];
+        auto [right_mx, count_mx] = max_r[idx];
+        auto [right_mn, count_mn] = min_r[idx];
+
+        if (right > right_mn) {
+            res1.push_back(1);
+
+        } else if (right == right_mn) {
+            res1.push_back(count_mn > 1 ? 1 : 0);
+
+        } else {
+            res1.push_back(0);
+        }
 
         if (right < right_mx) {
             res2.push_back(1);
 
         } else if (right == right_mx) {
-            res2.push_back(count > 1 ? 1 : 0);
+            res2.push_back(count_mx > 1 ? 1 : 0);
 
         } else {
             res2.push_back(0);
@@ -124,10 +151,10 @@ int main() {
     }
 
 
-    // for (int i = 0; i < n; i++) {
-    //     cout << res1[i] << " ";
-    // }
-    // cout << endl;
+    for (int i = 0; i < n; i++) {
+        cout << res1[i] << " ";
+    }
+    cout << endl;
 
     for (int i = 0; i < n; i++) {
         cout << res2[i] << " ";
