@@ -12,6 +12,8 @@ Sorting and Searching
 - Room Allocation: https://cses.fi/problemset/model/1164/
     - interesting solution to split the stay of a person to an arrival event and a depature event
 - Sum of Four Values: https://cses.fi/problemset/task/1642
+- Movie Festival II: https://cses.fi/problemset/task/1632/
+    - make sure to remember the greedy solution for picking ranges
 
 
 DP
