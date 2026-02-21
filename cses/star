@@ -22,3 +22,11 @@ DP
 - Counting Numbers: https://cses.fi/problemset/task/2220/
 
 
+Graph Algorithms
+- Shortest Routes II: https://cses.fi/problemset/task/1672
+    - Floyd-Warshall
+- High Score: https://cses.fi/problemset/task/1673
+    - Bellman-Ford
+- Longest Flight Route: https://cses.fi/problemset/task/1680/
+    - inserting application of topo sort + dp
+
