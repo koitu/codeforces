@@ -11,13 +11,13 @@ int main() {
 
     int a, b;
     map<int, set<int>> g;
-    map<int, set<int>> g_save;
+    vector<vector<int>> g_save(n+1);
     for (int i = 1; i < n; i++) {
         cin >> a >> b;
         g[a].insert(b);
         g[b].insert(a);
-        g_save[a].insert(b);
-        g_save[b].insert(a);
+        g_save[a].push_back(b);
+        g_save[b].push_back(a);
     }
 
     // find the dist from each node to its furthest node
@@ -67,7 +67,7 @@ int main() {
         }
     };
     // notice that if there are two centroids we recurse twice but due to max in dist we get the correct result
-    for (const auto [i, _]: g) {
+    for (const auto& [i, _]: g) {
         dfs(dfs, i, i, 0);
     }
 

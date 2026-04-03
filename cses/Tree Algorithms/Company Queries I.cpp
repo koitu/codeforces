@@ -10,12 +10,12 @@ int main() {
     cin >> n >> m;
 
     int a, b;
-    map<int, set<int>> g;
+    vector<vector<int>> g(n+1);
     for (int i = 2; i <= n; i++) {
         cin >> a;
 
         // we just need one way because we know that 1 is the root
-        g[a].insert(i);
+        g[a].push_back(i);
     }
 
     vector<pair<int, int>> res;

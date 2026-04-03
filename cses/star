@@ -33,3 +33,9 @@ Graph Algorithms
 Tree Algorithms
 - Tree Matching: https://cses.fi/problemset/task/1130/
     - I have no idea if my solution actually works or not
+- Company Queries II: https://cses.fi/problemset/task/1688/
+    - many other ways to solve this problem (look at Sparse table and Binary Lifting)
+    - https://cp-algorithms.com/data_structures/sparse-table.html
+    - https://cp-algorithms.com/graph/lca_binary_lifting.html
+    - Also this implmentation of Segment tree is so good
+        - https://codeforces.com/blog/entry/18051
