@@ -39,3 +39,5 @@ Tree Algorithms
     - https://cp-algorithms.com/graph/lca_binary_lifting.html
     - Also this implmentation of Segment tree is so good
         - https://codeforces.com/blog/entry/18051
+- Counting Paths: https://cses.fi/problemset/task/1136/
+    - such a smart solution: https://hackmd.io/@cs-mshah/H1P3CM-Mt
