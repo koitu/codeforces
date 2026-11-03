@@ -1,0 +1,89 @@
+/*
+ *
+Requirements
+1. The constructor creates numThreads worker threads that remain alive and wait for tasks.
+2. submit() adds a task to a shared FIFO queue. It should not execute the task on the calling thread.
+3. Workers remove tasks and execute them concurrently, with each task executed exactly once.
+4. Workers should sleep efficiently when no tasks are available—no busy-waiting.
+5. When the destructor runs, stop accepting new work, finish all previously submitted tasks, and join every worker thread.
+6. Don't hold the queue mutex while executing a task.
+For simplicity, assume numThreads > 0, tasks don't throw exceptions, and no other thread is calling submit() concurrently with destruction. You don't need to implement return values or futures.
+ *
+ */
+
+
+
+#include <vector>
+#include <queue>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <functional>
+
+using namespace std;
+
+class ThreadPool {
+    // started: 9:50
+
+    bool done = false;
+    queue<function<void()>> q;
+
+    mutex m;
+    condition_variable cv; // wait on this when you have no next task
+    vector<thread> threads;
+
+
+public:
+    ThreadPool(int numThreads) {
+        // Start numThreads worker threads
+        for (int i = 0; i < numThreads; i++) {
+            // needed to search up how to start a new thread
+            threads.emplace_back(&ThreadPool::worker, this);
+        }
+    }
+
+    void submit(function<void()> task) {
+        // Submit a task for execution
+        lock_guard lock(m);
+
+        q.push(task);
+
+        cv.notify_one();
+    }
+
+    ~ThreadPool() {
+        // Gracefully shut down the pool
+        {
+            lock_guard lock(m);
+            done = true;
+            cv.notify_all();
+        }
+
+        for (auto& t: threads) {
+            t.join();
+        }
+    }
+
+private:
+    // Your shared state and synchronization
+
+    void worker() {
+        // Worker thread implementation
+
+        while (true) {
+            unique_lock lock(m);
+            cv.wait(lock, [&]{ return done || !q.empty(); });
+            if (done && q.empty()) {
+                return;
+            }
+
+            function<void()> task = q.front(); q.pop();
+            lock.unlock();
+
+            task();
+        }
+    }
+};
+
+// g++ -std=c++17 -O1 -g -Wall -Wextra -pthread thread_pool_test.cpp -o test
+// ./test
